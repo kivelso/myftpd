@@ -6,6 +6,8 @@
 #include  <netinet/in.h> /* struct sockaddr_in, htons(), htonl(), */
                          /* and INADDR_ANY */
 
+# include <unistd.h>
+
 #include <time.h>
 
 #define   SERV_TCP_PORT   40004           /* server port no */
@@ -87,6 +89,14 @@ void putFile(int fd, char *dir, char *filename){
 	
 }
 
+const char * getDirectory(){
+	char cwd[1024];
+	getcwd(cwd, sizeof(cwd));
+		
+	return cwd;
+	
+}
+
 
 
 void daemon_init(void)
@@ -111,15 +121,42 @@ void daemon_init(void)
 
 void serve_a_client(int sd){
 
-//put in serving stuff
+	//get current directory
+	char directory[1024] = getDirectory();
+	
 
-int nr, nw, i=0;
-    char buf[BUFSIZE];
+	int nr, nw, i=0;
+	char buf[BUFSIZE];
+	
+	//send data
+	if ((nr = write(sd, directory, sizeof(directory))) <= 0)
+		exit(0);
 
 
-     /* read data from client */
-     if ((nr = read(sd, buf, sizeof(buf))) <= 0)
-         exit(0);   /* connection broken down */
+	/* read data from client */
+	if ((nr = read(sd, buf, sizeof(buf))) <= 0)
+		exit(0);   /* connection broken down */
+
+	char **args;
+	tokenise(buf,args);
+	int type = atoi(*args[0]);
+	
+	switch(type){
+		//dir command
+		case 1:
+			directoryList(sd,*args[1]);
+			break;
+		case 2:
+			changeDirectory(sd,args[1]);
+			break;
+		case 3:
+			getFile(sd,*args[1],*args[2]);
+			break;
+		case 4:
+			putFile(sd,*args[1],*args[2]);
+			break;
+	}
+
 
 }
 
