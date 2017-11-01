@@ -79,7 +79,7 @@ void getFile(int fd, char *dir, char *fileName){
 	//log fle if correct
 }
 
-void putFile(){
+void putFile(int fd, char *dir, char *filename){
 	//check directory and change if neccessary.
 	//save filename
 	//gather data and save it into a file
