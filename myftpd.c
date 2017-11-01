@@ -10,7 +10,7 @@
 
 #define   SERV_TCP_PORT   40004           /* server port no */
 #define   BUFSIZE         (1024*256)
-#define   LOGFILE	  log.txt
+#define   LOGFILE	  "log.txt"
 #define MODE 0666 
 
 //whenever this function is called it creates a log in the log file
@@ -58,6 +58,35 @@ void log(char* buf,int socketFD){
 	
 	
 }
+
+
+void directoryList(int fd, char* dir){
+	//confirm directory is correct from when changed
+	//execute ls command and save in string
+	//send directory to client
+}
+
+void changeDirectory(int fd, char *dir){
+	//change directory of process to its proffered
+	//get new directory in a string
+	//send a confirmation and new directory to client
+}
+
+void getFile(int fd, char *dir, char *fileName){
+	//check directory and change if neccessary.
+	//check if file exists
+	//upload file to client
+	//log fle if correct
+}
+
+void putFile(){
+	//check directory and change if neccessary.
+	//save filename
+	//gather data and save it into a file
+	//send client if successful or not
+	
+}
+
 
 
 void daemon_init(void)
